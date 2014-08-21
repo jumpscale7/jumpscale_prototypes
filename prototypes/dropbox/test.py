@@ -83,10 +83,9 @@ download()
 
 def findnew():
     for item in db.keys(prefix=""):
-        from IPython import embed
-        print "DEBUG NOW ooo"
-        embed()
-        p
+        
+        ##TODO
+        pass
     
 
         # dat=item[1]["modified"]
@@ -103,10 +102,6 @@ def findnew():
         #     from IPython import embed
         #     print "DEBUG NOW found"
         #     embed()
-
-from IPython import embed
-print "DEBUG NOW ooo"
-embed()
 
 
 findnew()

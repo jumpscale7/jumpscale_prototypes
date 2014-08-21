@@ -25,10 +25,9 @@ errors=[]
 def do(sourcedir,parts,dest):
     sourcedir=sourcedir.strip()
     dest=dest.strip()
-    if parts.find("*")<>-1:
-        from IPython import embed
-        print "DEBUG NOW id"
-        embed()
+    if parts.find("*")<>-1: 
+        ##TODO
+        pass
 
     for sourcepart in parts.split(","):
         sourcepart=sourcepart.strip()
@@ -66,9 +65,7 @@ for line in recipe.split("\n"):
     source,sourceparts,dest=line.split(":")
     do(source,sourceparts,dest)
 
-from IPython import embed
-print "DEBUG NOW uuu"
-embed()
+#TODO
 
 
 # mount -o bind apps apps

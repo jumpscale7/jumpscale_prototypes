@@ -82,10 +82,8 @@ def server_thread(ctx):
         router.send_multipart([identity, data])
 
 def writeBigFile():
-    file = open("testdata", "w")
-    from IPython import embed
-    print "DEBUG NOW ooo"
-    embed()
+    ##TODO
+    pass
 
 # The main task is just the same as in the first model.
 # .skip

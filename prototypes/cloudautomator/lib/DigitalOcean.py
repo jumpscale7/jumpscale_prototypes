@@ -59,9 +59,7 @@ class Droplet(Base):
         start = j.base.time.getTimeEpoch()
         now = start
         while now < start + timeout:
-            from IPython import embed
-            print "DEBUG NOW waitstart"
-            embed()
+            ##TODO
 
             if self.checkStatus() == "off":
                 return "OK"
@@ -71,9 +69,8 @@ class Droplet(Base):
         j.errorconditionhandler.raiseOperationalCritical(msgpub="Could not stop %s" % self.name)
 
     def snapshot(self):
-        from IPython import embed
-        print "DEBUG NOW snapshot"
-        embed()
+        ##TODO
+        pass
 
     def changeRootPasswd(self, newPasswd):
         ssh = SSH(self.ip_address)

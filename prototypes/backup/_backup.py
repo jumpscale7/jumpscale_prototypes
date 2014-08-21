@@ -84,11 +84,7 @@ def backup(src,dest):
     item=Item()    
     item.hash=j.tools.hash.md5(src)
     j.system.fs.writeFile(str(item),dest)
-    from IPython import embed
-    print "DEBUG NOW uuu"
-    embed()
-    o
-
+    #TODO
 
 
 def do(sourcedir,parts,dest,action):

@@ -14,6 +14,4 @@ WHERE (((ost_ticket.closed) Is Null));
 client=j.client.mysql.getClient('dco.incubaid.com', 2746,'despiegk', 'Kds007', 'osticket')
 result=client.queryToListDict(C)
 
-from IPython import embed
-print "DEBUG NOW id"
-embed()
+##TODO

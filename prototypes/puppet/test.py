@@ -8,9 +8,7 @@ import JumpScale.baselib.remote.fabric
 j.tools.puppet.install()
 
 
-from IPython import embed
-print "DEBUG NOW id"
-embed()
+##TODO
 
 
 j.application.stop()

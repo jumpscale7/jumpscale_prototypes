@@ -157,9 +157,7 @@ def post():
     # cl.executeStep("arch-chroot /mnt","sh-4.2#")
     # chroot=True
 
-    from IPython import embed
-    print "DEBUG NOW post"
-    embed()
+    #TODO
     
 
     #clean cache for pacman
@@ -171,9 +169,7 @@ def post():
 installArch()
 post()
 
-from IPython import embed
-print "DEBUG NOW oo"
-embed()
+#TODO
 
 # c.repository_ensure_pacman(
 

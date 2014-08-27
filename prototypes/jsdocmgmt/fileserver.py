@@ -13,10 +13,7 @@ zd = j.core.zdaemon.getZDaemon(port=3399, nrCmdGreenlets=50)
 class MyCommands():
 
     def __init__(self, daemon):
-        self.daemon = daemon
-        from IPython import embed
-        print "DEBUG NOW kjkjk"
-        embed()
+        #TODO
         
         self.repopath=""
 
@@ -24,9 +21,8 @@ class MyCommands():
         return True  # will authenticall all (is std)
 
     def reposList(self, **args):
-        from IPython import embed
-        print "DEBUG NOW listrepos"
-        embed()
+        ##TODO
+        pass
         
     def repoCreate(self,name):
         """
@@ -60,9 +56,8 @@ class MyCommands():
         @path is path of doc inside repo
         @return returns blosc compressed file in binary format        
         """
-        from IPython import embed
-        print "DEBUG NOW listrepos"
-        embed()
+        ##TODO
+        pass
 
     def docSet(self,reponame,path, bindata,**args):
         """
@@ -74,9 +69,8 @@ class MyCommands():
         (so if 2 users do a set +- at same time they will still be committed one after the other)
         populate the local leveldb with metadata about doc (key reponame__normalizedPath) has e.g. md5
         """
-        from IPython import embed
-        print "DEBUG NOW listrepos"
-        embed()
+        ##TODO
+        pass
 
     def docList(self,reponame,path):
         """

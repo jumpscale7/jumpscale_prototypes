@@ -11,6 +11,4 @@ print client.exportTickets()
 
 j.application.stop()
 
-from IPython import embed
-print "DEBUG NOW id"
-embed()
+#TODO

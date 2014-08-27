@@ -259,9 +259,7 @@ def main():
     if APP_KEY == '' or APP_SECRET == '':
         exit("You need to set your APP_KEY and APP_SECRET!")
     term = DropboxTerm(APP_KEY, APP_SECRET)
-    from IPython import embed
-    print "DEBUG NOW main"
-    embed()
+    #TODO
     
     # term.cmdloop()
 

@@ -89,9 +89,6 @@ import JumpScale.baselib.performancetrace
 
 p1=j.tools.performancetrace.profile('test0b()', globals=globals())
 
-from IPython import embed
-print "DEBUG NOW hhh"
-embed()
-
+#TODO
 
 j.application.stop()

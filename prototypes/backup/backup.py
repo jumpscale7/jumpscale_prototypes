@@ -80,7 +80,7 @@ def test2():
 
     #do a test the dir is the same (can use blobstor code for that)
 
-test0()
+test0b()
 
 j.application.stop()
 
@@ -88,7 +88,5 @@ j.application.stop()
 import JumpScale.baselib.performancetrace
 
 p1=j.tools.performancetrace.profile('test0b()', globals=globals())
-
-#TODO
 
 j.application.stop()

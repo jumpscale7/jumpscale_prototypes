@@ -22,7 +22,7 @@ def create_self_signed_cert(cert_dir):
 
     if not exists(join(cert_dir, CERT_FILE)) \
             or not exists(join(cert_dir, KEY_FILE)):
-            
+
         # create a key pair
         k = crypto.PKey()
         k.generate_key(crypto.TYPE_RSA, 2048)
@@ -97,12 +97,12 @@ def createCertificateSigningRequest():
     key=OpenSSL.crypto.dump_privatekey(OpenSSL.crypto.FILETYPE_PEM, key)
 
     # Write request
-    req= OpenSSL.crypto.dump_certificate_request(OpenSSL.crypto.FILETYPE_PEM, req)    
+    req= OpenSSL.crypto.dump_certificate_request(OpenSSL.crypto.FILETYPE_PEM, req)
     return key,req
 
 def signRequest(path,req):
     cacert=j.system.fs.fileGetContents("%s/ca.crt"%path)
-    cakey=j.system.fs.fileGetContents("%s/ca.key"%path)    
+    cakey=j.system.fs.fileGetContents("%s/ca.key"%path)
     ca_cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM,cacert)
     ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,cakey)
 
@@ -121,8 +121,8 @@ def signRequest(path,req):
     return pubkey
 
 def verify(path):
-    #Verify whether X509 certificate matches private key¶
-    #The code sample below shows how to check whether a certificate matches with a certain private key. 
+    #Verify whether X509 certificate matches private key
+    #The code sample below shows how to check whether a certificate matches with a certain private key.
     #OpenSSL has a function for this, X509_check_private_key, but pyOpenSSL provides no access to it.
 
     ctx = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
@@ -135,11 +135,22 @@ def verify(path):
     else:
       print "Key matches certificate"
 
+def bundle(certificate, key=None, certification_chain=(), passphrase=None):
+    """
+    Bundles a certificate with it's private key (if any) and it's chain of trust.
+    Optionally secures it with a passphrase.
+    """
+    p12 = OpenSSL.crypto.PKCS12()
+    p12.set_privatekey(key)
+    p12.set_certificate(certificate)
+    p12.set_ca_certificates(certification_chain)
+    return p12.export(passphrase=passphrase)
+
 path="/tmp/keys"
 
-# j.system.fs.removeDirTree(path)
-# j.system.fs.createDir(path)
-# create_self_signed_cert(path)
+j.system.fs.removeDirTree(path)
+j.system.fs.createDir(path)
+create_self_signed_cert(path)
 
 # create_self_signed_cert(path)
 cakey="%s/ca.crt"%path
@@ -149,7 +160,5 @@ prikey,req=createCertificateSigningRequest()
 pubkey=signRequest(path,req)
 
 
-from IPython import embed
-print "DEBUG NOW ooo"
-embed()
 
+import ipdb; ipdb.set_trace()

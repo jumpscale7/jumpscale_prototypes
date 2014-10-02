@@ -36,7 +36,9 @@ def create_self_signed_ca_cert(cert_dir):
         cert.get_subject().O = "my company"
         cert.get_subject().OU = "my organization"
         cert.get_subject().CN = gethostname()
-        cert.set_serial_number(1000)
+
+        import time
+        cert.set_serial_number(int(time.time() * 1000000))
         cert.gmtime_adj_notBefore(0)
         cert.gmtime_adj_notAfter(10*365*24*60*60)
         cert.set_issuer(cert.get_subject())
@@ -59,7 +61,7 @@ def create_self_signed_ca_cert(cert_dir):
             crypto.dump_privatekey(crypto.FILETYPE_PEM, k))
 
 
-def signCert(path):
+def createSignedCert(path, keyname):
     """
     Signing X509 certificate using CA
     The following code sample shows how to sign an X509 certificate using a CA:
@@ -74,15 +76,18 @@ def signCert(path):
 
     cert = OpenSSL.crypto.X509()
     cert.get_subject().CN = "node1.example.com"
-    cert.set_serial_number(1)
+    import time
+    cert.set_serial_number(int(time.time() * 1000000))
     cert.gmtime_adj_notBefore(0)
     cert.gmtime_adj_notAfter(24 * 60 * 60)
     cert.set_issuer(ca_cert.get_subject())
     cert.set_pubkey(key)
     cert.sign(ca_key, "sha1")
 
-    open(join(path, "akey.crt"), "wt").write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
-    open(join(path, "akey.key"), "wt").write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
+    with open(join(path, "%s.crt"%keyname), "wt") as cfile:
+        cfile.write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
+    with open(join(path, "%s.key"%keyname), "wt") as kfile:
+        kfile.write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
 
 def createCertificateSigningRequest(common_name):
     key = OpenSSL.crypto.PKey()
@@ -107,7 +112,8 @@ def signRequest(req, ca_cert, ca_key):
 
     cert = OpenSSL.crypto.X509()
     cert.set_subject(req.get_subject())
-    cert.set_serial_number(1)
+    import time
+    cert.set_serial_number(int(time.time() * 1000000))
     cert.gmtime_adj_notBefore(0)
     cert.gmtime_adj_notAfter(24 * 60 * 60)
     cert.set_issuer(ca_cert.get_subject())
@@ -132,44 +138,47 @@ def verify(path):
     else:
       print "Key matches certificate"
 
-def bundle(certificate, key=None, certification_chain=(), passphrase=None):
+def bundle(certificate, key, certification_chain=(), passphrase=None):
     """
     Bundles a certificate with it's private key (if any) and it's chain of trust.
     Optionally secures it with a passphrase.
     """
+    key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,key)
+
+    x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, certificate)
+
     p12 = OpenSSL.crypto.PKCS12()
-    if key:
-        opensslkey = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,key)
-        p12.set_privatekey(opensslkey)
-    opensslcert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, certificate)
-    p12.set_certificate(opensslcert)
+    p12.set_privatekey(key)
+    p12.set_certificate(x509)
     p12.set_ca_certificates(certification_chain)
-    p12.set_friendlyname("Client side certificate")
+    p12.set_friendlyname('Jumpscale client authentication')
     return p12.export(passphrase=passphrase)
+
+
 
 path="/tmp/keys"
 
 cacrt_filename = "%s/ca.crt"%path
 cakey_filename = "%s/ca.key"%path
 
-#j.system.fs.removeDirTree(path)
-#j.system.fs.createDir(path)
-#create_self_signed_ca_cert(path)
+j.system.fs.removeDirTree(path)
+j.system.fs.createDir(path)
+create_self_signed_ca_cert(path)
 
 cacert_filecontent=j.system.fs.fileGetContents(cacrt_filename)
 cakey_filecontent=j.system.fs.fileGetContents(cakey_filename)
 ca_cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM,cacert_filecontent)
 ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,cakey_filecontent)
 
-#signCert(path)
+createSignedCert(path, "server")
 prikey,req=createCertificateSigningRequest("client1.example.com")
 clientcert=signRequest(req, ca_cert, ca_key)
 
-clientcert_package = bundle(clientcert, prikey, [ca_cert], "Password")
+clientcert_package = bundle(clientcert, prikey, [ca_cert], "test")
 
 with open("%s/client1.example.com.p12"%path,"w") as cfile:
     cfile.write(clientcert_package)
 
 
 
-import ipdb; ipdb.set_trace()
+#import ipdb; ipdb.set_trace()

@@ -165,7 +165,7 @@ ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,cakey_fileco
 prikey,req=createCertificateSigningRequest("client1.example.com")
 clientcert=signRequest(req, ca_cert, ca_key)
 
-clientcert_package = bundle(clientcert, prikey, [ca_cert], None)
+clientcert_package = bundle(clientcert, prikey, [ca_cert], "Password")
 
 with open("%s/client1.example.com.p12"%path,"w") as cfile:
     cfile.write(clientcert_package)

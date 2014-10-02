@@ -10,7 +10,7 @@ from os.path import exists, join
 
 
 
-def create_self_signed_cert(cert_dir):
+def create_self_signed_ca_cert(cert_dir):
     """
     is for CA
     If datacard.crt and datacard.key don't exist in cert_dir, create a new
@@ -84,12 +84,13 @@ def signCert(path):
     open(join(path, "akey.crt"), "wt").write(crypto.dump_certificate(crypto.FILETYPE_PEM, cert))
     open(join(path, "akey.key"), "wt").write(crypto.dump_privatekey(crypto.FILETYPE_PEM, key))
 
-def createCertificateSigningRequest():
+def createCertificateSigningRequest(common_name):
     key = OpenSSL.crypto.PKey()
     key.generate_key(OpenSSL.crypto.TYPE_RSA, 2048)
 
     req = OpenSSL.crypto.X509Req()
-    req.get_subject().CN = "node1.example.com"
+    req.get_subject().commonName = common_name
+
     req.set_pubkey(key)
     req.sign(key, "sha1")
 
@@ -100,11 +101,7 @@ def createCertificateSigningRequest():
     req= OpenSSL.crypto.dump_certificate_request(OpenSSL.crypto.FILETYPE_PEM, req)
     return key,req
 
-def signRequest(path,req):
-    cacert=j.system.fs.fileGetContents("%s/ca.crt"%path)
-    cakey=j.system.fs.fileGetContents("%s/ca.key"%path)
-    ca_cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM,cacert)
-    ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,cakey)
+def signRequest(req, ca_cert, ca_key):
 
     req = OpenSSL.crypto.load_certificate_request(OpenSSL.crypto.FILETYPE_PEM,req)
 
@@ -141,23 +138,37 @@ def bundle(certificate, key=None, certification_chain=(), passphrase=None):
     Optionally secures it with a passphrase.
     """
     p12 = OpenSSL.crypto.PKCS12()
-    p12.set_privatekey(key)
-    p12.set_certificate(certificate)
+    if key:
+        opensslkey = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,key)
+        p12.set_privatekey(opensslkey)
+    opensslcert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, certificate)
+    p12.set_certificate(opensslcert)
     p12.set_ca_certificates(certification_chain)
+    p12.set_friendlyname("Client side certificate")
     return p12.export(passphrase=passphrase)
 
 path="/tmp/keys"
 
-j.system.fs.removeDirTree(path)
-j.system.fs.createDir(path)
-create_self_signed_cert(path)
+cacrt_filename = "%s/ca.crt"%path
+cakey_filename = "%s/ca.key"%path
 
-# create_self_signed_cert(path)
-cakey="%s/ca.crt"%path
+#j.system.fs.removeDirTree(path)
+#j.system.fs.createDir(path)
+#create_self_signed_ca_cert(path)
 
-signCert(path)
-prikey,req=createCertificateSigningRequest()
-pubkey=signRequest(path,req)
+cacert_filecontent=j.system.fs.fileGetContents(cacrt_filename)
+cakey_filecontent=j.system.fs.fileGetContents(cakey_filename)
+ca_cert = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM,cacert_filecontent)
+ca_key = OpenSSL.crypto.load_privatekey(OpenSSL.crypto.FILETYPE_PEM,cakey_filecontent)
+
+#signCert(path)
+prikey,req=createCertificateSigningRequest("client1.example.com")
+clientcert=signRequest(req, ca_cert, ca_key)
+
+clientcert_package = bundle(clientcert, prikey, [ca_cert], None)
+
+with open("%s/client1.example.com.p12"%path,"w") as cfile:
+    cfile.write(clientcert_package)
 
 
 

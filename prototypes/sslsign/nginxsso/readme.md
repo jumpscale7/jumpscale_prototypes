@@ -28,6 +28,7 @@ Put the following entries in your `/etc/hosts` file and point them to the ip of 
 www.operator.mothership1.com
 racktables.operator.mothership1.com
 cbgrid.operator.mothership1.com
+icinga.operator.mothership1.com
 ```
 
 Browse to `www.operator.mothership1.com`

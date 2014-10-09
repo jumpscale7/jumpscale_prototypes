@@ -17,8 +17,8 @@ def create_self_signed_ca_cert(cert_dir):
     self-signed cert and keypair and write them into that directory.
     """
 
-    CERT_FILE = "ca.crt"
-    KEY_FILE = "ca.key"
+    CERT_FILE = "ca.crt" #info (certificaat) (pub is inhere + other info)
+    KEY_FILE = "ca.key" #private key
 
     if not exists(join(cert_dir, CERT_FILE)) \
             or not exists(join(cert_dir, KEY_FILE)):
@@ -38,7 +38,7 @@ def create_self_signed_ca_cert(cert_dir):
         cert.get_subject().CN = gethostname()
 
         import time
-        cert.set_serial_number(int(time.time() * 1000000))
+        cert.set_serial_number(int(time.time() * 1000000)) 
         cert.gmtime_adj_notBefore(0)
         cert.gmtime_adj_notAfter(10*365*24*60*60)
         cert.set_issuer(cert.get_subject())

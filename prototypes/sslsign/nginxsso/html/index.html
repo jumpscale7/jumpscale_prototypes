@@ -85,6 +85,16 @@
             <div class="col-lg-4">
                 <div class="panel panel-info">
                   <div class="panel-heading">
+                    <h3 class="panel-title"><a id="icingalink" href="#">Icinga <span class="glyphicon glyphicon-log-in"></span></a></h3>
+                  </div>
+                  <div class="panel-body">
+                    Monitors the status of the physical nodes
+                  </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="panel panel-info">
+                  <div class="panel-heading">
                     <h3 class="panel-title"><a id="racktableslink" href="#">Racktables <span class="glyphicon glyphicon-log-in"></span></a></h3>
                   </div>
                   <div class="panel-body">
@@ -99,6 +109,8 @@
         gridlink.href = window.location.origin.replace('www.','cbgrid.');
         var racktableslink = document.getElementById('racktableslink');
         racktableslink.href = window.location.origin.replace('www.','racktables.');
+        var icingalink = document.getElementById('icingalink');
+        icingalink.href = window.location.origin.replace('www.', 'icinga.') + '/icinga/';
     </script>
   </body>
 </html>

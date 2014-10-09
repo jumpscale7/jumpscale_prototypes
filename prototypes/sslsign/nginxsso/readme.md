@@ -16,6 +16,8 @@ Use the openresty jpackage.
 
 Generate and install the necessary certificates as explained in the sslsign readme.
 
+Put the proper credentials in `conf/racktablesauthenticate.lua`, `conf/icingaauthenticate.lua` and `conf/jsauthenticate.lua`.
+
 Start nginx on this location and with the proper configuration file:
 ```
 nginx -p `pwd`/ -c conf/nginx.conf

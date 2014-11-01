@@ -10,8 +10,8 @@ import JumpScale.baselib.redis
 j.application.start("redistest")
 
 
-q=j.clients.redis.getRedisQueue("127.0.0.1", 7768, 'work')
-q2=j.clients.redis.getRedisQueue("127.0.0.1", 7768, 'return')
+q=j.clients.redis.getRedisQueue("127.0.0.1", 9999, 'work')
+q2=j.clients.redis.getRedisQueue("127.0.0.1", 9999, 'return')
 
 print "start recv"
 while True:

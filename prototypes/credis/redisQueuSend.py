@@ -13,7 +13,7 @@ from JumpScale import j
 
 j.application.start("redistest")
 
-redis=Redis(port=7767)
+redis=Redis(port=9999)
 
 redis.delete("queues:work")
 redis.delete("queues:return")
@@ -22,8 +22,8 @@ redis.delete("queues:return")
 q=RedisQueue("work","queues",redis)
 q2=RedisQueue("return","queues",redis)
 
-# q=RedisQueue("127.0.0.1", 7768, 'work')
-# q2=j.clients.redis.getRedisQueue("127.0.0.1", 7768, 'return')
+# q=RedisQueue("127.0.0.1", 9999, 'work')
+# q2=j.clients.redis.getRedisQueue("127.0.0.1", 9999, 'return')
 
 block=""
 for i in range(1024*1):

@@ -7,7 +7,7 @@ import JumpScale.baselib.redis
 
 class Redis():
 
-    def __init__(self, addr="127.0.0.1",port=7768):
+    def __init__(self, addr="127.0.0.1",port=9999):
         self.redis=credis.Connection(host=addr,port=port)
         self.redis.connect()    
         self.fallbackredis=j.clients.redis.getRedisClient(addr,port)

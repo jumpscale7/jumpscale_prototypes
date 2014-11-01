@@ -13,14 +13,14 @@ from Redis import *
 from RedisQueue import *
 
 
-redis=Redis(port=7767)
+redis=Redis(port=9999)
 
 q=RedisQueue("work","queues",redis)
 q2=RedisQueue("return","queues",redis)
 
 
-# q=j.clients.redis.getRedisQueue("127.0.0.1", 7768, 'work')
-# q2=j.clients.redis.getRedisQueue("127.0.0.1", 7768, 'return')
+# q=j.clients.redis.getRedisQueue("127.0.0.1", 9999, 'work')
+# q2=j.clients.redis.getRedisQueue("127.0.0.1", 9999, 'return')
 
 print "start recv"
 while True:

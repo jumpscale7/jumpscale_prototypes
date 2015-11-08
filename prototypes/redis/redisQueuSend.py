@@ -6,7 +6,7 @@ import pstats
 
 from JumpScale import j
 
-import JumpScale.baselib.redis
+import JumpScale.baselib.redis2
 
 j.application.start("redistest")
 

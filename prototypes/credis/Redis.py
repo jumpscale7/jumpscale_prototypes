@@ -3,7 +3,7 @@ import credis
 #see https://github.com/yihuang/credis
 
 from JumpScale import j
-import JumpScale.baselib.redis
+import JumpScale.baselib.redis2
 
 class Redis():
 
